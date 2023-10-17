@@ -3,7 +3,7 @@ export default {
   data() {
     return {
       animate: false,
-      form: 'NONE'
+      form: 'HEADLINE'
     };
   },
   methods: {
@@ -11,17 +11,31 @@ export default {
       this.animate = !this.animate
     },
     toggleLogin() {
-      this.toggleHeadline()
-      if(this.form === 'NONE' || this.form === 'REGISTER')
+      if(this.form === 'HEADLINE') {
         this.form = 'LOGIN'
-      else
-        this.form = 'NONE'
+        this.toggleHeadline()
+      } else if(this.form === 'LOGIN') {
+        this.form = 'HEADLINE'
+        this.toggleHeadline()
+      } else {
+        this.form = 'REGISTER'
+      }
     },
     toggleRegister() {
-      this.toggleHeadline()
-      this.form = 'REGISTER'
+      if(this.form === 'HEADLINE') {
+        this.form = 'REGISTER'
+        this.toggleHeadline()
+      } else if(this.form === 'REGISTER') {
+        this.form = 'HEADLINE'
+        this.toggleHeadline()
+      } else {
+        this.form = 'LOGIN'
+      }
     },
     login() {
+
+    },
+    register() {
 
     }
   }
@@ -51,8 +65,8 @@ export default {
     </nav>
 
     <!-- Login Form -->
-    <div>
-      <form :action="login" class="login-container" :class="{ 'form-show': this.form === 'LOGIN'}">
+    <div v-if="this.form === 'LOGIN'">
+      <form :action="login" class="login-container" :class="{ 'open-form': this.animate }">
         <label for="uname"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="uname">
 
@@ -60,6 +74,22 @@ export default {
         <input type="password" placeholder="Enter Password" name="pass">
 
         <button type="submit">Login</button>
+      </form>
+    </div>
+
+    <!-- Register Form -->
+    <div v-if="this.form === 'REGISTER'">
+      <form :action="register" class="register-container" :class="{ 'open-form': this.animate }">
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter Username" name="uname">
+
+        <label for="pass"><b>Password</b></label>
+        <input type="password" placeholder="Enter Password" name="pass">
+
+        <label for="passConfirm"><b>Confirm Password</b></label>
+        <input type="password" placeholder="Confirm Password" name="passConfirm">
+
+        <button type="submit"></button>
       </form>
     </div>
   </main>
@@ -81,7 +111,7 @@ export default {
   opacity: 0;
 }
 
-.form-show {
+.open-form {
   animation: showForm 1s;
   animation-fill-mode: forwards;
   animation-direction: normal;
@@ -92,7 +122,7 @@ export default {
   font-size: 2rem;
   padding: 0 1rem;
   user-select: none;
-  color: whitesmoke;
+  color: var(--vt-c-text-dark-1);
   background-color: transparent;
   border: 0;
 }
@@ -106,19 +136,10 @@ export default {
   }
 }
 
-@keyframes hideForm {
-  from {
-    opacity: 100%;
-  }
-  to {
-    opacity: 0;
-    display: none;
-  }
-}
 
 @media (hover:hover) {
   .link:hover{
-    background-color: hsla(160, 100%, 37%, 0.2);
+    background-color: var(--color-border-hover);
   }
 }
 
