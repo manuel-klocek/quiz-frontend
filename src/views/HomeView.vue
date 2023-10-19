@@ -1,9 +1,17 @@
 <script lang="ts">
+import { ApiService } from "@/services/ApiService";
+
+let api = new ApiService()
+
 export default {
   data() {
     return {
       animate: false,
-      form: 'HEADLINE'
+      form: 'HEADLINE',
+      username: '',
+      password: '',
+      passwordConfirm: '',
+      mail: ''
     };
   },
   methods: {
@@ -18,7 +26,7 @@ export default {
         this.form = 'HEADLINE'
         this.toggleHeadline()
       } else {
-        this.form = 'REGISTER'
+        this.form = 'LOGIN'
       }
     },
     toggleRegister() {
@@ -29,20 +37,24 @@ export default {
         this.form = 'HEADLINE'
         this.toggleHeadline()
       } else {
-        this.form = 'LOGIN'
+        this.form = 'REGISTER'
       }
     },
     login() {
-
+      api.requestLogin(this.username, this.password)
     },
     register() {
-
+      console.log("something")
     }
+  },
+  mounted() {
+    document.title = "Welcome to QuizMe"
   }
 };
 </script>
 
 <template>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap" rel="stylesheet">
@@ -59,37 +71,40 @@ export default {
     </h1>
 
     <!-- Login and Register Button -->
-    <nav id="nav" :class="{ 'nav-center': this.animate }">
+    <nav :class="{ 'nav-center': this.animate }">
       <a class="link" @click="toggleLogin">Login</a>
       <a class="link" @click="toggleRegister">Register</a>
     </nav>
 
     <!-- Login Form -->
     <div v-if="this.form === 'LOGIN'">
-      <form :action="login" class="login-container" :class="{ 'open-form': this.animate }">
+      <form @submit.prevent class="login-container" :class="{ 'open-form': this.animate }">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname">
+        <input type="text" placeholder="Enter Username" name="uname" v-model="username">
 
         <label for="pass"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="pass">
+        <input type="password" placeholder="Enter Password" name="pass" v-model="password">
 
-        <button type="submit">Login</button>
+        <button type="submit" class="submit-button" @click="login">Login</button>
       </form>
     </div>
 
     <!-- Register Form -->
     <div v-if="this.form === 'REGISTER'">
-      <form :action="register" class="register-container" :class="{ 'open-form': this.animate }">
+      <form @submit.prevent class="register-container" :class="{ 'open-form': this.animate }">
         <label for="uname"><b>Username</b></label>
-        <input type="text" placeholder="Enter Username" name="uname">
+        <input type="text" placeholder="Enter Username" name="uname" v-model="username">
+
+        <label for="mail"><b>Mail</b></label>
+        <input type="email" placeholder="Enter Mail" name="mail" v-model="mail">
 
         <label for="pass"><b>Password</b></label>
-        <input type="password" placeholder="Enter Password" name="pass">
+        <input type="password" placeholder="Enter Password" name="pass" v-model="password">
 
         <label for="passConfirm"><b>Confirm Password</b></label>
-        <input type="password" placeholder="Confirm Password" name="passConfirm">
+        <input type="password" placeholder="Confirm Password" name="passConfirm" v-model="passwordConfirm">
 
-        <button type="submit"></button>
+        <button class="submit-button" type="submit" @click="register">Register</button>
       </form>
     </div>
   </main>
@@ -97,19 +112,51 @@ export default {
 
 <style scoped>
 .headline {
+  text-align: center;
+  width: auto;
+  margin: 0 auto 0 auto;
   font-family: 'Tilt Neon', sans-serif;
   font-size: 10rem;
   user-select: none;
-  transition: margin-top 1s;
+  transition: margin 1s;
 }
 
 .headline-up {
-  margin-top: -28rem;
+  margin: -28rem auto 0 auto;
 }
 
 .login-container {
+  position: absolute;
+  width: 35rem;
   opacity: 0;
+  margin: auto;
+  color: var(--vt-c-text-dark-1);
+  background-color: transparent;
 }
+
+.register-container {
+  position: absolute;
+  width: 35rem;
+  opacity: 0;
+  color: var(--vt-c-text-dark-1);
+  background-color: transparent;
+}
+
+input[type=text], input[type=password], input[type=email] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+.submit-button {
+  margin-top: 1rem;
+  padding: 5px 20px;
+  width: 100%;
+}
+
 
 .open-form {
   animation: showForm 1s;
