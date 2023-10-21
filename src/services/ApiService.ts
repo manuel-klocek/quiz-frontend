@@ -3,7 +3,13 @@ import type {Category, Question} from "@/models/Models";
 
 const BASE_URL = "http://localhost:8080/api"
 
-export class ApiService {
+class ApiService {
+    private static apiInstance: ApiService = new ApiService()
+
+    public static useApi(): ApiService {
+        return ApiService.apiInstance
+    }
+
     private token: String
     private toast = ToastComponent.Toast
 
@@ -41,7 +47,7 @@ export class ApiService {
         return true
     }
 
-    async requestRegister(name, pass, mail): Promise<boolean> {
+    public async requestRegister(name, pass, mail): Promise<boolean> {
         const response = await fetch(BASE_URL + '/user', {
             method: 'POST',
             headers: {
@@ -66,11 +72,10 @@ export class ApiService {
         return false
     }
 
-    async fetchCategories(): Promise<Category[]> {
+    public async fetchCategories(): Promise<Category[]> {
         const response = await fetch(BASE_URL + '/categories', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + this.token
             }
         })
@@ -78,15 +83,17 @@ export class ApiService {
         return await response.json()
     }
 
-    async fetchQuestions(categoryId: number): Promise<Question[]> {
+    public async fetchQuestions(categoryId: number): Promise<Question[]> {
         const response = await fetch(BASE_URL + '/questions?category=' + categoryId.toString(), {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + this.token
             }
         })
 
         return await response.json()
     }
+
 }
+
+export default ApiService

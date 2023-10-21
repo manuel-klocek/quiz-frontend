@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import { ApiService } from "@/services/ApiService";
 import { useRouter } from "vue-router";
 import { ref } from 'vue';
 import Swal from 'sweetalert2'
 import ToastComponent from "@/components/ToastComponent.vue";
+import ApiService from "@/services/ApiService";
 
-const api = new ApiService()
+const api = ApiService.useApi()
 const router = useRouter()
 const useToast = ToastComponent.Toast
 
@@ -47,8 +47,10 @@ function toggleRegister() {
 async function login() {
   const success = await api.requestLogin(username.value, password.value)
 
-  if(success)
-    router.push("/categories")
+  if(success) {
+    //router.push("/categories")
+    router.push('/quiz?category=' + '32')
+  }
 }
 
 async function register() {
