@@ -48,6 +48,7 @@ async function login() {
   const success = await api.requestLogin(username.value, password.value)
 
   if(success) {
+    //FIXME
     //router.push("/categories")
     router.push('/quiz?category=' + '32')
   }
