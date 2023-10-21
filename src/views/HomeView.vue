@@ -47,22 +47,8 @@ function toggleRegister() {
 async function login() {
   const success = await api.requestLogin(username.value, password.value)
 
-  if(success) {
+  if(success)
     router.push("/categories")
-    await useToast.fire({
-      icon: 'success',
-      title: 'Successfully logged in',
-      text: 'Welcome back ' + username.value + '!'
-    })
-  }
-  else {
-    await Swal.fire({
-      title: "Error",
-      text: "Username or password does not match",
-      icon: "error",
-      confirmButtonText: "Try again"
-    })
-  }
 }
 
 async function register() {
