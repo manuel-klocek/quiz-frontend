@@ -1,5 +1,6 @@
-import ToastComponent from "@/components/ToastComponent.vue";
-import type {Category, Question} from "@/models/Models";
+import ToastComponent from "@/components/ToastComponent.vue"
+import type {Category, Question} from "@/models/Models"
+import {dataStore} from "@/services/DataStore"
 
 const BASE_URL = "http://localhost:8080/api"
 
@@ -9,11 +10,9 @@ class ApiService {
     public static useApi(): ApiService {
         return ApiService.apiInstance
     }
-
-    private token: String
     private toast = ToastComponent.Toast
 
-    public async requestLogin(username: String, password: String): Promise<boolean> {
+    public async requestLogin(username: string, password: string): Promise<boolean> {
         const response = await fetch('http://localhost:8080/api/login',  {
             method: 'POST',
             headers: {
@@ -37,17 +36,19 @@ class ApiService {
         }
 
         const result = await response.json()
-        this.token = result['token']
+        dataStore.sessionToken = result['token']
+        dataStore.username = username
 
         this.toast.fire({
             icon: 'success',
             title: 'Successfully logged in',
             text: 'Welcome back ' + username + '!'
         })
+
         return true
     }
 
-    public async requestRegister(name, pass, mail): Promise<boolean> {
+    public async requestRegister(name: string, pass: string, mail: string): Promise<boolean> {
         const response = await fetch(BASE_URL + '/user', {
             method: 'POST',
             headers: {
@@ -76,7 +77,7 @@ class ApiService {
         const response = await fetch(BASE_URL + '/categories', {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + this.token
+                'Authorization': 'Bearer ' + dataStore.sessionToken
             }
         })
 
@@ -87,7 +88,7 @@ class ApiService {
         const response = await fetch(BASE_URL + '/questions?category=' + categoryId.toString(), {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + this.token
+                'Authorization': 'Bearer ' + dataStore.sessionToken
             }
         })
 

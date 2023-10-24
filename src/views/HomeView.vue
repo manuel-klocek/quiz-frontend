@@ -46,7 +46,6 @@ function toggleRegister() {
 
 async function login() {
   const success = await api.requestLogin(username.value, password.value)
-
   if(success) {
     //FIXME
     //router.push("/categories")
@@ -82,20 +81,15 @@ async function register() {
 </script>
 
 <template>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap" rel="stylesheet">
-
   <main>
     <!--  Logo  -->
     <h1 class="headline" :class="{ 'headline-up': animate }">
-      <span style="color: darkred">Q</span>
-      <span style="color: darkblue">u</span>
-      <span style="color: darkgoldenrod">i</span>
-      <span style="color: darkgreen">z</span>
-      <span style="color: darkmagenta">M</span>
-      <span style="color: darkorange">e</span>
+      <span class="letter" style="color: #ff98ba">Q</span>
+      <span class="letter" style="color: #cfffcc">u</span>
+      <span class="letter" style="color: #80cee1">i</span>
+      <span class="letter" style="color: #fca572">z</span>
+      <span class="letter" style="color: #c87cff">M</span>
+      <span class="letter" style="color: #fbe870">e</span>
     </h1>
 
     <!-- Login and Register Button -->
@@ -143,7 +137,6 @@ async function register() {
   text-align: center;
   width: auto;
   margin: 0 auto 0 auto;
-  font-family: 'Tilt Neon', sans-serif;
   font-size: 10rem;
   user-select: none;
   transition: margin 1s;
@@ -158,7 +151,6 @@ async function register() {
   width: 35rem;
   opacity: 0;
   margin: auto;
-  color: var(--vt-c-text-dark-1);
   background-color: transparent;
 }
 
@@ -166,7 +158,6 @@ async function register() {
   position: absolute;
   width: 35rem;
   opacity: 0;
-  color: var(--vt-c-text-dark-1);
   background-color: transparent;
 }
 
@@ -185,6 +176,9 @@ input[type=text], input[type=password], input[type=email] {
   width: 100%;
 }
 
+.letter {
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+}
 
 .open-form {
   animation: showForm 1s;
@@ -197,7 +191,6 @@ input[type=text], input[type=password], input[type=email] {
   font-size: 2rem;
   padding: 0 1rem;
   user-select: none;
-  color: var(--vt-c-text-dark-1);
   background-color: transparent;
   border: 0;
 }

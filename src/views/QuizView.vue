@@ -1,28 +1,28 @@
 <script lang="ts" setup>
 import ApiService from "@/services/ApiService";
 import { ref, onMounted } from 'vue';
+import HeaderComponent from '../components/HeaderComponent.vue'
+import type { Question } from "@/models/Models";
 
-let api
-const questions = ref([])
+let api: ApiService
+const questions = ref([] as Question[])
 
 onMounted(() => {
   api = ApiService.useApi()
+
   fetchQuestions()
 })
 
 const fetchQuestions = async () => {
   let urlParams = new URLSearchParams(window.location.search)
-  questions.value = await api.fetchQuestions(urlParams.get('category') as number)
+  questions.value = await api.fetchQuestions(Number(urlParams.get('category') ?? '0'))
 }
 
 </script>
 
 <template>
-  <div>
-
-  </div>
+  <HeaderComponent/>
 </template>
 
 <style scoped>
-
 </style>
