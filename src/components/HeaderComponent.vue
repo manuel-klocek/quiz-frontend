@@ -75,8 +75,8 @@ export default {
           <div class="sub-menu" v-if="isSubMenuOpen" :class="{ 'sub-menu-animation': isSubMenuOpen }">
             <div class="user-info">
               <div class="avatar-container">
-                <img class="avatar-icon" src="@/assets/avatars/avatar-1.svg" alt="Avatar Icon" height="80" width="80" @mouseover="onHover = true" @mouseout="onHover = false" @mousedown="changeAvatar"/>
-                <label class="dont-show" :class="{'avatar-text': onHover }" >Personalize</label>
+                <img class="avatar-icon" :class="{ 'avatar-icon-hover': onHover}" src="@/assets/avatars/avatar-1.svg" alt="Avatar Icon" height="80" width="80" @mouseover="onHover = true" @mouseout="onHover = false" @mousedown="changeAvatar"/>
+                <label class="dont-show" :class="{'avatar-text': onHover }" @mouseover="onHover = true" @mousedown="changeAvatar">Personalize</label>
               </div>
               <div class="menu-item-container">
                 <div class="menu-item username">
@@ -218,18 +218,21 @@ a {
   margin-top: 0.5rem;
 }
 
-.avatar-icon:hover {
+.avatar-icon-hover{
+  cursor: pointer;
   filter: brightness(70%);
 }
 
 .avatar-text {
   display: initial;
+  cursor: pointer;
   position: absolute;
   font-size: 0.8rem;
   color: var(--vt-c-text-dark-1);
   top: 2.25rem;
   left: 0.8rem;
 }
+
 
 .username {
   font-weight: bolder;
