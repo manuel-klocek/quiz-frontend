@@ -12,6 +12,8 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "pnpm": "^8.9.2",
+    "sweetalert2": "^11.7.32",
     "vue": "^3.3.4",
     "vue-router": "^4.2.4"
   },
