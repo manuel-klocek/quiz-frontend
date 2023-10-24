@@ -56,12 +56,12 @@ export default {
 <template>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="true">
   <link href="https://fonts.googleapis.com/css2?family=Tilt+Neon&display=swap" rel="stylesheet">
 
   <main>
     <!--  Logo  -->
-    <h1 class="headline" :class="{ 'headline-up': this.animate }">
+    <h1 class="headline" :class="{ 'headline-up': animate }">
       <span style="color: darkred">Q</span>
       <span style="color: darkblue">u</span>
       <span style="color: darkgoldenrod">i</span>
@@ -71,14 +71,14 @@ export default {
     </h1>
 
     <!-- Login and Register Button -->
-    <nav :class="{ 'nav-center': this.animate }">
+    <nav :class="{ 'nav-center': animate }">
       <a class="link" @click="toggleLogin">Login</a>
       <a class="link" @click="toggleRegister">Register</a>
     </nav>
 
     <!-- Login Form -->
-    <div v-if="this.form === 'LOGIN'">
-      <form @submit.prevent class="login-container" :class="{ 'open-form': this.animate }">
+    <div v-if="form === 'LOGIN'">
+      <form @submit.prevent class="login-container" :class="{ 'open-form': animate }">
         <label for="uname"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="uname" v-model="username">
 
@@ -90,8 +90,8 @@ export default {
     </div>
 
     <!-- Register Form -->
-    <div v-if="this.form === 'REGISTER'">
-      <form @submit.prevent class="register-container" :class="{ 'open-form': this.animate }">
+    <div v-if="form === 'REGISTER'">
+      <form @submit.prevent class="register-container" :class="{ 'open-form': animate }">
         <label for="uname"><b>Username</b></label>
         <input type="text" placeholder="Enter Username" name="uname" v-model="username">
 
@@ -130,7 +130,7 @@ export default {
   width: 35rem;
   opacity: 0;
   margin: auto;
-  color: var(--vt-c-text-dark-1);
+  color: var(--color-text);
   background-color: transparent;
 }
 
@@ -138,7 +138,7 @@ export default {
   position: absolute;
   width: 35rem;
   opacity: 0;
-  color: var(--vt-c-text-dark-1);
+  color: var(--color-text);
   background-color: transparent;
 }
 
@@ -169,7 +169,7 @@ input[type=text], input[type=password], input[type=email] {
   font-size: 2rem;
   padding: 0 1rem;
   user-select: none;
-  color: var(--vt-c-text-dark-1);
+  color: var(--color-text);
   background-color: transparent;
   border: 0;
 }
