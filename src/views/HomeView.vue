@@ -58,7 +58,7 @@ async function register() {
     console.log("passwords must match!")
     return
   }
-
+  
   const success = await api.requestRegister(username.value, password.value, mail.value)
 
   if(success) {
