@@ -2,3 +2,4 @@ applications:
   - name: dev-quizme-frontend
     memory: 1G
     path: dist
+    buildpack: https://github.com/cloudfoundry/nodejs-buildpack.git
