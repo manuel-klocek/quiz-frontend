@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "pnpm run dev",
+    "start": "npm i -g vite",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -47,5 +47,9 @@
     "typescript": "~5.2.0",
     "vite": "^4.4.9",
     "vue-tsc": "^1.8.11"
+  },
+  "engines": {
+    "node": "20.7.0",
+    "npm": "10.1.0"
   }
 }
