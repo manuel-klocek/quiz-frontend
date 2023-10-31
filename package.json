@@ -2,8 +2,13 @@
   "name": "quiz-frontend",
   "version": "0.0.1",
   "private": true,
+  "packageManager": "pnpm@7.26.2",
+  "engineStrict": true,
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
-    "start" : "vite",
+    "start" : "pnpm run dev",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
