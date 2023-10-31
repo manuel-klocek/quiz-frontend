@@ -1,9 +1,9 @@
 {
   "name": "quiz-frontend",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "vite",
+    "start": "pnpm run dev",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
