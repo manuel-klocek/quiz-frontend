@@ -1,8 +1,8 @@
 import ToastComponent from "@/components/ToastComponent.vue"
-import type {Category, Question} from "@/models/Models"
+import type {Category, Question, User} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
 
-const BASE_URL = "http://localhost:8080/api"
+const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
 
 class ApiService {
     private static apiInstance: ApiService = new ApiService()
@@ -13,7 +13,7 @@ class ApiService {
     private toast = ToastComponent.Toast
 
     public async requestLogin(username: string, password: string): Promise<boolean> {
-        const response = await fetch('http://localhost:8080/api/login',  {
+        const response = await fetch(BASE_URL + '/login',  {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -95,6 +95,18 @@ class ApiService {
         return await response.json()
     }
 
+    public async requestUserInfo(): Promise<User> {
+        const response = await fetch(BASE_URL + '/user-info', {
+            method: 'GET',
+            headers: {
+                'Authorization': 'Bearer ' + dataStore.sessionToken
+            }
+        })
+
+        const data = await response.json()
+
+        return data["user-info"] as User
+    }
 }
 
 export default ApiService

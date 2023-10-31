@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+import HeaderComponent from '@/components/HeaderComponent.vue'
 const backendResponse = [
   {
     categoryId: "10",
@@ -38,8 +39,8 @@ const backendResponse = [
   }
 ];
 
-
 export default {
+  components: {HeaderComponent},
   data() {
     return {
       backendResponse: backendResponse
@@ -47,74 +48,46 @@ export default {
   },
   computed: {
     sortedResponse() {
-      // Sort the backend response alphabetically by categoryName
-      return this.backendResponse.slice().sort((a, b) => a.categoryName.localeCompare(b.categoryName));
+      return this.backendResponse.slice().sort((a, b) => a.categoryName.localeCompare(b.categoryName))
     }
   },
   methods: {
-    handleClick(index) {
-      console.log(`Clicked category: ${this.sortedResponse[index].categoryName}`);
-      // Handle the click event as needed, for example, navigate to a new page.
+    handleClick(index: number) {
+      let categoryId = this.sortedResponse[index].categoryId ?? '9'
+
+      this.$router.push('/quiz?category=' + categoryId)
     }
   }
 };
 </script>
 
 <template>
-  <div class="container">
-    <h1 id="categoryHeadline">
-      <span style="color: darkred">Q</span>
-      <span style="color: darkblue">u</span>
-      <span style="color: darkgoldenrod">i</span>
-      <span style="color: darkgreen">z</span>
-      <span style="color: darkmagenta">M</span>
-      <span style="color: darkorange">e</span>
-    </h1>
-  </div>
+  <HeaderComponent/>
 
-  <div class ="CategoriesHeadline">
-    <h1 id="categorieH1">
+  <div>
+    <h1 id="categoryTitle">
       Categories
     </h1>
-  </div>
 
-  <div class="text-container">
-    <div v-for="(category, index) in sortedResponse" :key="category.categoryId" class="text-item" @click="handleClick(index)">
-      {{ category.categoryName }}
+    <div class="text-container">
+      <div v-for="(category, index) in sortedResponse" :key="category.categoryId" class="text-item" @click="handleClick(index)">
+        {{ category.categoryName }}
+      </div>
     </div>
   </div>
-
 </template>
 
 <style scoped>
-#categoryHeadline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  text-align: center;
-  width: auto;
-  font-family: 'Tilt Neon', sans-serif;
-  font-size: 5rem;
-  user-select: none;
-  transition: margin 1s;
-  padding: 0;
-  margin: 0;
-  line-height: 100px;
-}
 
-#categorieH1 {
+#categoryTitle {
   text-align: center;
-}
-
-.container {
-  height: 100%;
 }
 
 .text-container {
+  width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
 }
 
 .text-item {
@@ -125,10 +98,11 @@ export default {
   text-align: center;
   cursor: pointer;
   font-weight: bold;
-  border: 1px solid #000;
+  border: 1px solid var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
   transition: all 0.3s ease;
 }
 
@@ -136,4 +110,9 @@ export default {
   transform: scale(1.1);
 }
 
+@media(max-width: 500px) {
+  #categoryTitle {
+    margin-top: 9rem;
+  }
+}
 </style>
