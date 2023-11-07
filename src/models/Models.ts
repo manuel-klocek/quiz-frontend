@@ -8,7 +8,7 @@ export type Category = {
 }
 
 export type Question = {
-    id: number,
+    id: string,
     categoryId: number,
     category: string,
     type: QuestionType,
@@ -16,4 +16,17 @@ export type Question = {
     question: string,
     correctAnswer: string,
     incorrectAnswers: string[]
+}
+
+export type User = {
+    id: string,
+    username: string,
+    highscore: number,
+    totallyAnsweredQuestions: number,
+    mail: string
+}
+
+export type Answer = {
+    questionId: string,
+    correctAnswered: boolean
 }

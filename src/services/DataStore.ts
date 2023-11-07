@@ -1,4 +1,5 @@
 import { reactive } from 'vue';
+import type {Answer} from "@/models/Models";
 
 export const dataStore = reactive({
     id: '',
@@ -7,13 +8,5 @@ export const dataStore = reactive({
     highscore: 0,
     totallyAnsweredQuestions: 0,
     sessionToken: '',
-
-    wipe: function() {
-        this.id = ''
-        this.username = ''
-        this.mail = ''
-        this.highscore = 0
-        this.totallyAnsweredQuestions = 0
-        this.sessionToken = ''
-    }
-})
+    answers: [] as Answer[]
+});

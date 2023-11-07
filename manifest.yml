@@ -1,0 +1,4 @@
+applications:
+  - name: dev-quizme-frontend
+    memory: 1G
+    path: dist

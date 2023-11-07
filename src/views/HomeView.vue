@@ -4,13 +4,14 @@ import { ref } from 'vue';
 import Swal from 'sweetalert2'
 import ToastComponent from "@/components/ToastComponent.vue";
 import ApiService from "@/services/ApiService";
+import { dataStore } from '@/services/DataStore'
 
 const api = ApiService.useApi()
 const router = useRouter()
 const useToast = ToastComponent.Toast
 
 const form = ref('HEADLINE')
-const animate = ref(false)
+const animate = ref<boolean>()
 const username = ref('')
 const password = ref('')
 const passwordConfirm = ref('')
@@ -45,12 +46,27 @@ function toggleRegister() {
 }
 
 async function login() {
-  const success = await api.requestLogin(username.value, password.value)
-  if(success) {
-    //FIXME
-    //router.push("/categories")
-    router.push('/quiz?category=' + '32')
-  }
+  const successfulLogin = await api.requestLogin(username.value, password.value)
+  if(!successfulLogin) 
+    return
+
+  const successfulUserInfo = await fetchUserInfo()
+  if(!successfulUserInfo)
+    return
+  
+  router.push('/categories')
+}
+
+async function fetchUserInfo(): Promise<boolean> {
+  const user = await api.requestUserInfo()
+
+  dataStore.id = user.id
+  dataStore.username = user.username
+  dataStore.highscore = user.highscore
+  dataStore.totallyAnsweredQuestions = user.totallyAnsweredQuestions
+  dataStore.mail = user.mail
+
+  return true
 }
 
 async function register() {
@@ -83,7 +99,7 @@ async function register() {
 <template>
   <main>
     <!--  Logo  -->
-    <h1 class="headline" :class="{ 'headline-up': animate }">
+    <h1 class="headline" :class="{ 'headline-up': animate, 'headline-down': !animate }">
       <span class="letter" style="color: #ff98ba">Q</span>
       <span class="letter" style="color: #cfffcc">u</span>
       <span class="letter" style="color: #80cee1">i</span>
@@ -133,31 +149,44 @@ async function register() {
 </template>
 
 <style scoped>
+
 .headline {
+  min-height: 10rem;
+  position: relative;
   text-align: center;
   width: auto;
-  margin: 0 auto 0 auto;
+  margin: 0 auto;
   font-size: 10rem;
   user-select: none;
-  transition: margin 1s;
 }
 
 .headline-up {
-  margin: -28rem auto 0 auto;
+  animation: headline-up-animation;
+  animation-fill-mode: forwards;
+  animation-duration: 1s;
+}
+
+.headline-down {
+  animation: headline-down-animation;
+  animation-fill-mode: forwards;
+  animation-duration: 1s;
 }
 
 .login-container {
-  position: absolute;
+  position: relative;
   width: 35rem;
+  height: 50rem;
   opacity: 0;
-  margin: auto;
+  margin: 0 auto;
   background-color: transparent;
 }
 
 .register-container {
-  position: absolute;
+  position: relative;
   width: 35rem;
+  height: 50rem;
   opacity: 0;
+  margin: 0 auto;
   background-color: transparent;
 }
 
@@ -186,21 +215,29 @@ input[type=text], input[type=password], input[type=email] {
   animation-direction: normal;
 }
 
-.link {
-  text-align: left;
-  font-size: 2rem;
-  padding: 0 1rem;
-  user-select: none;
-  background-color: transparent;
-  border: 0;
-}
-
 @keyframes showForm {
   from {
     opacity: 0;
   }
   to {
     opacity: 100%;
+  }
+}
+
+@keyframes headline-up-animation {
+  from {
+    margin-top: 28rem;
+  }
+  to {
+    margin-top: 0;
+  }
+}
+
+@keyframes headline-down-animation {
+  from {
+    margin-top: -28rem;
+  } to {
+    margin-top: 0;
   }
 }
 
@@ -212,32 +249,27 @@ input[type=text], input[type=password], input[type=email] {
 }
 
 nav {
-  width: 100%;
+  margin: 0 auto 0 30rem;
+  width: fit-content;
   font-size: 12px;
-  text-align: center;
   transition: margin-left 1s;
 }
 
 .nav-center {
-  margin-left: 10rem;
+  margin-left: 45rem;
 }
 
 nav a {
   display: inline-block;
   padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
 }
 
-nav a:first-of-type {
+.link {
+  text-align: left;
+  font-size: 2rem;
+  padding: 0 1rem;
+  user-select: none;
+  background-color: transparent;
   border: 0;
-}
-
-@media (min-width: 1024px) {
-  nav {
-    text-align: left;
-    margin: -1rem 0 0 -2rem;
-    font-size: 2rem;
-    padding: 1rem 0;
-  }
 }
 </style>

@@ -1,6 +1,7 @@
 <script lang="ts">
 import { dataStore } from '@/services/DataStore'
 import ToastComponent from "@/components/ToastComponent.vue";
+import apiService from "@/services/ApiService";
 
 export default {
   name: 'HeaderComponent.vue',
@@ -31,7 +32,8 @@ export default {
       }
     },
     logout() {
-      dataStore.wipe()
+      //TODO
+      //apiService.logout()
       this.useToast.fire(
           {
             icon: 'success',
@@ -68,7 +70,11 @@ export default {
 
       <div class="headline-end">
         <div class="menu-icon">
-          <svg width="50px" height="50px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" @click="toggleSubMenu">
+          <svg v-if="isSubMenuOpen" viewBox="0 0 24 24" width="50px" height="50px" @click="toggleSubMenu">
+            <path class="icon-color" d="M19 5L4.99998 19M5.00001 5L19 19" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+
+          <svg v-else viewBox="0 0 24 24" width="50px" height="50px" @click="toggleSubMenu">
             <path class="icon-color" d="M4 6H20M4 12H20M4 18H20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
 
@@ -119,8 +125,9 @@ export default {
 .container {
   position: absolute;
   top: 0;
-  left: 0;
   width: 100%;
+  height: 100%;
+  margin-top: 1rem;
 }
 
 .dont-show {
@@ -128,6 +135,7 @@ export default {
 }
 
 .headline-container {
+  margin-top: 0;
   user-select: none;
   display: flex;
 }
@@ -141,7 +149,7 @@ export default {
   font-size: 4rem;
   font-family: 'Tilt Neon', sans-serif;
   text-align: start;
-  margin: 1rem 3rem;
+  margin: 0 3rem;
 }
 
 a {
@@ -163,9 +171,9 @@ a {
 }
 
 .sub-menu {
-  cursor: default;
   position: absolute;
-  top: calc(60%);
+  cursor: default;
+  top: 0;
   width: 20rem;
   float: right;
   right: 2.25rem;
@@ -173,7 +181,7 @@ a {
   text-align: center;
   background-color: var(--color-background-soft);
   border-color: var(--color-border);
-  z-index: 1;
+  z-index: 2;
 }
 
 .sub-menu-button {
@@ -251,11 +259,11 @@ a {
 
 @keyframes slide-down {
   0% {
-    top: -50%;
+    top: 0;
     opacity: 0;
   }
   100% {
-    top: 60%;
+    top: 4.5rem;
     opacity: 100%;
   }
 }
