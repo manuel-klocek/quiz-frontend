@@ -1,59 +1,27 @@
 <script lang="ts">
 import HeaderComponent from '@/components/HeaderComponent.vue'
-const backendResponse = [
-  {
-    categoryId: "10",
-    categoryName: "Entertainment: Books"
-  },
-  {
-    categoryId: "11",
-    categoryName: "Entertainment: Film"
-  },
-  {
-    categoryId: "26",
-    categoryName: "Celebrities"
-  },
-  {
-    categoryId: "27",
-    categoryName: "Animals"
-  },
-  {
-    categoryId: "28",
-    categoryName: "Vehicles"
-  },
-  {
-    categoryId: "29",
-    categoryName: "Entertainment: Comics"
-  },
-  {
-    categoryId: "30",
-    categoryName: "Science: Gadgets"
-  },
-  {
-    categoryId: "31",
-    categoryName: "Entertainment: Japanese Anime & Manga"
-  },
-  {
-    categoryId: "9",
-    categoryName: "General Knowledge"
-  }
-];
+import ApiService from "@/services/ApiService";
+import { ref } from 'vue';
+import type { Category } from '@/models/Models';
+
+const api = ApiService.useApi()
+const categories: ref<Category[]> = ref([])
 
 export default {
   components: {HeaderComponent},
   data() {
     return {
-      backendResponse: backendResponse
+      categories: categories
     };
   },
-  computed: {
-    sortedResponse() {
-      return this.backendResponse.slice().sort((a, b) => a.categoryName.localeCompare(b.categoryName))
-    }
+  mounted() {
+    api.fetchCategories().then(response => {
+      categories.value = response.slice().sort((a, b) => a.categoryName.localeCompare(b.categoryName))
+    })
   },
   methods: {
     handleClick(index: number) {
-      let categoryId = this.sortedResponse[index].categoryId ?? '9'
+      let categoryId = categories.value[index].categoryId ?? '9'
 
       this.$router.push('/quiz?category=' + categoryId)
     }
@@ -70,7 +38,7 @@ export default {
     </h1>
 
     <div class="text-container">
-      <div v-for="(category, index) in sortedResponse" :key="category.categoryId" class="text-item" @click="handleClick(index)">
+      <div v-for="(category, index) in categories" :key="category.categoryId" class="text-item" @click="handleClick(index)">
         {{ category.categoryName }}
       </div>
     </div>
