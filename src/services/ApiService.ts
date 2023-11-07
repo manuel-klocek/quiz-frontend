@@ -107,6 +107,15 @@ class ApiService {
 
         return data["user-info"] as User
     }
+
+    public async logout(): Promise<Response> {
+        return await fetch(BASE_URL + '/logout', {
+            method: 'DELETE',
+            headers: {
+                'Authorization' : 'Bearer ' + dataStore.sessionToken
+            }
+        })
+    }
 }
 
 export default ApiService

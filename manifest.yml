@@ -1,4 +1,5 @@
 applications:
   - name: dev-quizme-frontend
     memory: 1G
-    path: dist
+    path: ./dist
+    buildpack: https://github.com/cloudfoundry/staticfile-buildpack.git

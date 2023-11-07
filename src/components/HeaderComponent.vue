@@ -32,8 +32,7 @@ export default {
       }
     },
     logout() {
-      //TODO
-      //apiService.logout()
+      apiService.logout()
       this.useToast.fire(
           {
             icon: 'success',
