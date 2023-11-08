@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import ApiService from "@/services/ApiService";
-import { ref, onMounted } from 'vue';
+import {ref, onMounted, UnwrapRef} from 'vue';
 import HeaderComponent from '../components/HeaderComponent.vue'
-import type { Question, Answer, QuestionType } from "@/models/Models";
-import {dataStore} from "@/services/DataStore";
+import type {Question, Answer, QuizResult} from "@/models/Models";
+import Swal from 'sweetalert2';
 import {useRouter} from "vue-router";
 
 let api: ApiService
@@ -14,7 +14,7 @@ const quizMaxRounds = ref(0)
 const currentQuestion = ref({} as Question)
 const currentRoundAnswers = ref([] as string[])
 const userAnswers = ref([] as Answer[])
-const currentTimeout = ref<Promise<void> | null>(null)
+const currentTimeout = ref<Promise<void>  | null>(null)
 
 onMounted(() => {
   api = ApiService.useApi()
@@ -30,7 +30,6 @@ const fetchQuestions = async () => {
 }
 
 const nextQuizRound = async (round: number = 0) => {
-  console.log(userAnswers.value)
   if(round !== 0) {
     await delayAfterAnswer()
     currentTimeout.value = null
@@ -89,7 +88,7 @@ const evaluateAnswer = (index: number) => {
     userAnswers.value = [...userAnswers.value, answer]
   }
 
-  if(currentQuizRound.value >= questions.value.length) {
+  if(currentQuizRound.value === questions.value.length - 1) {
     endQuiz()
     return
   }
@@ -97,13 +96,36 @@ const evaluateAnswer = (index: number) => {
   nextQuizRound(currentQuizRound.value + 1)
 }
 
-function endQuiz() {
-  dataStore.answers = userAnswers.value
-  router.push("/results")
+async function endQuiz() {
+  const scores = await api.retrieveScore(userAnswers.value)
+
+  await fireResultOverview(scores)
+
+  await api.fetchUserInfo()
+
+  router.back()
 }
 
-function delayAfterAnswer(): Promise<void> {
-  currentTimeout.value = new Promise(resolve => setTimeout(resolve, 2000))
+async function fireResultOverview(scores: QuizResult) {
+  let text = `Your Score: ${scores.score} \t Your Highscore: ${scores.highscore}`
+
+  if(scores.score > scores.highscore) {
+    text = `You achieved a new Highscore! Congratulations \n
+                          Your Score is: ${scores.score}`
+  }
+
+  await Swal.fire({
+    imageUrl: 'src/assets/win-image.svg',
+    imageAlt: 'Win Image',
+    imageHeight: '500px',
+    title: 'Congratulations',
+    text: text,
+    confirmButtonText: 'Ok'
+  })
+}
+
+function delayAfterAnswer(): Promise<void> | null {
+  currentTimeout.value = new Promise(resolve => setTimeout(resolve, 2000)) as Promise<void>
   return currentTimeout.value
 }
 

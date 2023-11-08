@@ -23,10 +23,16 @@ export type User = {
     username: string,
     highscore: number,
     totallyAnsweredQuestions: number,
-    mail: string
+    mail: string,
+    icon: string
 }
 
 export type Answer = {
     questionId: string,
     correctAnswered: boolean
+}
+
+export type QuizResult = {
+    score: number,
+    highscore: number
 }

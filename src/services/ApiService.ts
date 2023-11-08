@@ -1,8 +1,8 @@
 import ToastComponent from "@/components/ToastComponent.vue"
-import type {Category, Question, User} from "@/models/Models"
+import type {Answer, Category, Question, QuizResult, User} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
 
-const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
+const BASE_URL = "http://localhost:8080/api"
 
 class ApiService {
     private static apiInstance: ApiService = new ApiService()
@@ -58,7 +58,8 @@ class ApiService {
                 {
                     username: name,
                     password: pass,
-                    mail: mail
+                    mail: mail,
+                    icon: 'Avatar1'
                 }
             )
         })
@@ -95,7 +96,7 @@ class ApiService {
         return await response.json()
     }
 
-    public async requestUserInfo(): Promise<User> {
+    private async requestUserInfo(): Promise<User> {
         const response = await fetch(BASE_URL + '/user-info', {
             method: 'GET',
             headers: {
@@ -115,6 +116,73 @@ class ApiService {
                 'Authorization' : 'Bearer ' + dataStore.sessionToken
             }
         })
+    }
+
+    public async editUserInfo(username: string, mail: string, icon: string): Promise<boolean> {
+        const response = await fetch(BASE_URL + '/user', {
+            method: 'PUT',
+            headers: {
+                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: dataStore.id,
+                username: username,
+                mail: mail,
+                icon: icon
+            })
+        })
+
+
+
+        if(response.status == 202)
+            return true
+        else
+            console.log("Bad Request with status code: " + response.status + " " + response.statusText)
+        return false
+    }
+
+    //TODO error management
+    public async retrieveScore(answers: Answer[]): Promise<QuizResult> {
+        const response = await fetch(BASE_URL + '/answers', {
+            method: 'POST',
+            headers: {
+                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(answers)
+        })
+
+        return await response.json()
+    }
+
+    //TODO error management
+    public async fetchScoreboard(page: number = 0): Promise<User[]> {
+        let parameters = ''
+        if(page !== 0)
+            parameters = '?page=' + page
+
+        const response = await fetch(BASE_URL + '/scoreboard' + parameters, {
+            headers: {
+                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Content-Type': 'application/json'
+            }
+        })
+
+        return response.json()
+    }
+
+    public async fetchUserInfo(): Promise<boolean> {
+        const user = await this.requestUserInfo()
+
+        dataStore.id = user.id
+        dataStore.username = user.username
+        dataStore.highscore = user.highscore
+        dataStore.totallyAnsweredQuestions = user.totallyAnsweredQuestions
+        dataStore.mail = user.mail
+        dataStore.icon = user.icon
+
+        return true
     }
 }
 
