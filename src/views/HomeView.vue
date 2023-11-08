@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from "vue-router";
 import { ref } from 'vue';
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
 import ToastComponent from "@/components/ToastComponent.vue";
 import ApiService from "@/services/ApiService";
 import { dataStore } from '@/services/DataStore'
@@ -50,23 +50,11 @@ async function login() {
   if(!successfulLogin) 
     return
 
-  const successfulUserInfo = await fetchUserInfo()
+  const successfulUserInfo = await api.fetchUserInfo()
   if(!successfulUserInfo)
     return
   
   router.push('/categories')
-}
-
-async function fetchUserInfo(): Promise<boolean> {
-  const user = await api.requestUserInfo()
-
-  dataStore.id = user.id
-  dataStore.username = user.username
-  dataStore.highscore = user.highscore
-  dataStore.totallyAnsweredQuestions = user.totallyAnsweredQuestions
-  dataStore.mail = user.mail
-
-  return true
 }
 
 async function register() {

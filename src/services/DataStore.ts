@@ -1,6 +1,6 @@
 import { reactive } from 'vue';
-import type {Answer} from "@/models/Models";
 
+//TODO take out dummy data
 export const dataStore = reactive({
     id: '',
     username: '',
@@ -8,5 +8,5 @@ export const dataStore = reactive({
     highscore: 0,
     totallyAnsweredQuestions: 0,
     sessionToken: '',
-    answers: [] as Answer[]
+    icon: ''
 });

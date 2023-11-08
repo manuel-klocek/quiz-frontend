@@ -24,6 +24,7 @@ export default {
       else
         document.removeEventListener('keyup', this.closeSubMenuOnEsc, true)
       this.isSubMenuOpen = !this.isSubMenuOpen
+      setTimeout(this.setImageSource, 1)
     },
     closeSubMenuOnEsc(event: any) {
       if(event.code === 'Escape') {
@@ -44,10 +45,20 @@ export default {
       this.$router.push("/")
     },
     settings() {
-      this.$router.push('/settings')
+      this.$router.push('/settings?tab=AccountInfo')
     },
     changeAvatar() {
-      this.$router.push('/settings')
+      this.$router.push('/settings?tab=AvatarSelection')
+    },
+    setImageSource() {
+      console.log(dataStore)
+      const avatar = dataStore.icon
+      const element = document.getElementById('avatar-img')
+      if(element) {
+        const attr = element.attributes.getNamedItem('src')
+        attr.value = 'src/assets/avatars/avatar-' + avatar.split('r')[1] + '.svg'
+        element.attributes.setNamedItem(attr)
+      }
     }
   }
 }
@@ -80,7 +91,7 @@ export default {
           <div class="sub-menu" v-if="isSubMenuOpen" :class="{ 'sub-menu-animation': isSubMenuOpen }">
             <div class="user-info">
               <div class="avatar-container">
-                <img class="avatar-icon" :class="{ 'avatar-icon-hover': onHover}" src="@/assets/avatars/avatar-1.svg" alt="Avatar Icon" height="80" width="80" @mouseover="onHover = true" @mouseout="onHover = false" @mousedown="changeAvatar"/>
+                <img class="avatar-icon" :class="{ 'avatar-icon-hover': onHover}" src="@/assets/avatars/avatar-1.svg" id="avatar-img" alt="Avatar Icon" height="80" width="80" @mouseover="onHover = true" @mouseout="onHover = false" @mousedown="changeAvatar"/>
                 <label class="dont-show" :class="{'avatar-text': onHover }" @mouseover="onHover = true" @mousedown="changeAvatar">Personalize</label>
               </div>
               <div class="menu-item-container">
@@ -125,7 +136,7 @@ export default {
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: fit-content;
   margin-top: 1rem;
 }
 
@@ -236,8 +247,8 @@ a {
   position: absolute;
   font-size: 0.8rem;
   color: var(--vt-c-text-dark-1);
-  top: 2.25rem;
-  left: 0.8rem;
+  top: 2.9rem;
+  left: 1rem;
 }
 
 
