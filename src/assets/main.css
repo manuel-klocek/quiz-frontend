@@ -18,7 +18,7 @@ body {
 @media(max-width: 1000px) {
   body {
     place-items: initial;
-    overflow: hidden;
+    overflow: auto;
     touch-action: none;
   }
 }
