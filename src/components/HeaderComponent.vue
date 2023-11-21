@@ -1,7 +1,6 @@
 <script lang="ts">
 import { dataStore } from '@/services/DataStore'
 import ToastComponent from "@/components/ToastComponent.vue";
-import apiService from "@/services/ApiService";
 import ApiService from "@/services/ApiService";
 
 export default {
@@ -19,9 +18,6 @@ export default {
       useToast: ToastComponent.Toast,
       avatarImgSource: ''
     }
-  },
-  mounted() {
-    this.setAvatarImageSource(dataStore.icon.split('r')[1])
   },
   methods: {
     toggleSubMenu() {
@@ -56,8 +52,13 @@ export default {
     changeAvatar() {
       this.$router.push('/settings?tab=AvatarSelection')
     },
-    setAvatarImageSource(avatarSelector: string) {
-      this.avatarImgSource = 'src/assets/avatars/avatar-' + avatarSelector + '.svg'
+    async setAvatarImageSource(avatarSelector: string) {
+      try {
+        const avatar = await import(`@/assets/avatars/avatar-${avatarSelector}.svg`);
+        this.avatarImgSource = avatar.default || avatar;
+      } catch (error) {
+        console.error('Error loading avatar:', error);
+      }
     }
   }
 }
@@ -283,5 +284,10 @@ a {
   height: 2px;
   background-image: linear-gradient(to right, #ff98ba, #fbe870);
   margin-top: 0.5rem;
+}
+
+
+@media(max-width: 700px) {
+
 }
 </style>

@@ -115,7 +115,7 @@ async function fireResultOverview(scores: QuizResult) {
   }
 
   await Swal.fire({
-    imageUrl: 'src/assets/win-image.svg',
+    imageUrl: '@/assets/win-image.svg',
     imageAlt: 'Win Image',
     imageHeight: '500px',
     title: 'Congratulations',

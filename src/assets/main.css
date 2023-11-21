@@ -12,4 +12,13 @@ body {
   display: flex;
   place-items: center;
   overflow: hidden;
+  touch-action: none;
+}
+
+@media(max-width: 1000px) {
+  body {
+    place-items: initial;
+    overflow: hidden;
+    touch-action: none;
+  }
 }
