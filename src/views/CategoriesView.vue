@@ -36,42 +36,44 @@ export default {
 </script>
 
 <template>
-  <HeaderComponent/>
+  <main class="page-container">
+    <HeaderComponent/>
 
-  <div class="category-highscore-container">
-    <div class="category-container">
-      <div>
-        <h1 id="title">
-          Categories
-        </h1>
+    <div class="category-highscore-container">
+      <div class="category-container">
+        <div>
+          <h1 id="title">
+            Categories
+          </h1>
 
-        <div class="text-container">
-          <div v-for="(category, index) in categories" :key="category.categoryId" class="text-item" @click="handleClick(index)">
-            {{ category.categoryName }}
+          <div class="text-container">
+            <div v-for="(category, index) in categories" :key="category.categoryId" class="text-item" @click="handleClick(index)">
+              {{ category.categoryName }}
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="highscore-container">
-      <h1 id="title">Scoreboard</h1>
+      <div class="highscore-container">
+        <h1 id="title">Scoreboard</h1>
 
-      <table>
-        <tr>
-          <th>Place</th>
-          <th>Username</th>
-          <th>Totally Answered Questions</th>
-          <th>Highscore</th>
-        </tr>
-        <tr v-for="(item, index) in scoreboard" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ item.username }}</td>
-          <td>{{ item.totallyAnsweredQuestions }}</td>
-          <td>{{ item.highscore }}</td>
-        </tr>
-      </table>
+        <table>
+          <tr>
+            <th>Place</th>
+            <th>Username</th>
+            <th>Totally Answered Questions</th>
+            <th>Highscore</th>
+          </tr>
+          <tr v-for="(item, index) in scoreboard" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.username }}</td>
+            <td>{{ item.totallyAnsweredQuestions }}</td>
+            <td>{{ item.highscore }}</td>
+          </tr>
+        </table>
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <style scoped>
@@ -109,6 +111,7 @@ th, td {
 
 .text-container {
   width: 100%;
+  overflow: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -134,9 +137,23 @@ th, td {
   transform: scale(1.1);
 }
 
-@media(max-width: 500px) {
+@media(max-width: 1000px) {
   #title {
     margin-top: 9rem;
+  }
+
+  .page-container {
+    overflow: hidden;
+  }
+
+  .category-highscore-container {
+    display: inline-block;
+    width: 98%;
+    overflow: auto;
+  }
+
+  .category-container {
+    margin-left: -5%;
   }
 }
 </style>

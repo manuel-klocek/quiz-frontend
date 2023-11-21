@@ -4,7 +4,6 @@ import { ref } from 'vue';
 import Swal from 'sweetalert2';
 import ToastComponent from "@/components/ToastComponent.vue";
 import ApiService from "@/services/ApiService";
-import { dataStore } from '@/services/DataStore'
 
 const api = ApiService.useApi()
 const router = useRouter()
@@ -85,7 +84,7 @@ async function register() {
 </script>
 
 <template>
-  <main>
+  <main class="page-container">
     <!--  Logo  -->
     <h1 class="headline" :class="{ 'headline-up': animate, 'headline-down': !animate }">
       <span class="letter" style="color: #ff98ba">Q</span>
@@ -240,11 +239,12 @@ nav {
   margin: 0 auto 0 30rem;
   width: fit-content;
   font-size: 12px;
-  transition: margin-left 1s;
+  transition: margin-left 1s ease;
 }
 
 .nav-center {
-  margin-left: 45rem;
+  margin-left: calc((100vw - 100px) / 2);
+  transform: translateX(-50%);
 }
 
 nav a {
@@ -260,4 +260,45 @@ nav a {
   background-color: transparent;
   border: 0;
 }
+
+@media(max-width: 1000px) {
+  .page-container {
+    margin-top: 8rem;
+  }
+
+  .headline {
+    font-size: 5rem;
+  }
+
+  .nav-center{
+    margin: 0 auto;
+    transform: none;
+  }
+
+  .headline-up {
+    animation: none;
+  }
+
+  .headline-down {
+    animation: none;
+  }
+
+  nav {
+    margin: 0 auto;
+  }
+
+  .link {
+    position: relative;
+    margin: auto;
+  }
+
+  .login-container {
+    width: 100%;
+  }
+
+  .register-container {
+    width: 100%;
+  }
+}
+
 </style>

@@ -122,20 +122,20 @@ const goBack = () => {
     </div>
 
     <div class="avatar-selection" v-if="currentTab === 'AvatarSelection'">
-      <img class="avatar-item" src="src/assets/avatars/avatar-1.svg" alt="Avatar-1" id="Avatar1" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-2.svg" alt="Avatar-2" id="Avatar2" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-3.svg" alt="Avatar-3" id="Avatar3" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-4.svg" alt="Avatar-4" id="Avatar4" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-5.svg" alt="Avatar-5" id="Avatar5" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-6.svg" alt="Avatar-6" id="Avatar6" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-7.svg" alt="Avatar-7" id="Avatar7" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-8.svg" alt="Avatar-8" id="Avatar8" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-9.svg" alt="Avatar-9" id="Avatar9" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-10.svg" alt="Avatar-10" id="Avatar10" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-11.svg" alt="Avatar-11" id="Avatar11" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-12.svg" alt="Avatar-12" id="Avatar12" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-13.svg" alt="Avatar-13" id="Avatar13" width="100" height="100" @click="avatarSelection" draggable="false">
-      <img class="avatar-item" src="src/assets/avatars/avatar-14.svg" alt="Avatar-14" id="Avatar14" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-1.svg" alt="Avatar-1" id="Avatar1" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-2.svg" alt="Avatar-2" id="Avatar2" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-3.svg" alt="Avatar-3" id="Avatar3" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-4.svg" alt="Avatar-4" id="Avatar4" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-5.svg" alt="Avatar-5" id="Avatar5" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-6.svg" alt="Avatar-6" id="Avatar6" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-7.svg" alt="Avatar-7" id="Avatar7" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-8.svg" alt="Avatar-8" id="Avatar8" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-9.svg" alt="Avatar-9" id="Avatar9" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-10.svg" alt="Avatar-10" id="Avatar10" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-11.svg" alt="Avatar-11" id="Avatar11" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-12.svg" alt="Avatar-12" id="Avatar12" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-13.svg" alt="Avatar-13" id="Avatar13" width="100" height="100" @click="avatarSelection" draggable="false">
+      <img class="avatar-item" src="@/assets/avatars/avatar-14.svg" alt="Avatar-14" id="Avatar14" width="100" height="100" @click="avatarSelection" draggable="false">
     </div>
   </div>
 </template>

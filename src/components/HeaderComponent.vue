@@ -1,7 +1,7 @@
 <script lang="ts">
 import { dataStore } from '@/services/DataStore'
 import ToastComponent from "@/components/ToastComponent.vue";
-import apiService from "@/services/ApiService";
+import ApiService from "@/services/ApiService";
 
 export default {
   name: 'HeaderComponent.vue',
@@ -12,9 +12,11 @@ export default {
         highscore: dataStore.highscore,
         answeredQuestions: dataStore.totallyAnsweredQuestions
       },
+      api: ApiService.useApi(),
       isSubMenuOpen: false,
       onHover: false,
-      useToast: ToastComponent.Toast
+      useToast: ToastComponent.Toast,
+      avatarImgSource: ''
     }
   },
   methods: {
@@ -23,8 +25,8 @@ export default {
         document.addEventListener('keyup', this.closeSubMenuOnEsc, true)
       else
         document.removeEventListener('keyup', this.closeSubMenuOnEsc, true)
+      this.setAvatarImageSource(dataStore.icon.split('r')[1])
       this.isSubMenuOpen = !this.isSubMenuOpen
-      setTimeout(this.setImageSource, 1)
     },
     closeSubMenuOnEsc(event: any) {
       if(event.code === 'Escape') {
@@ -33,7 +35,7 @@ export default {
       }
     },
     logout() {
-      apiService.logout()
+      this.api.logout()
       this.useToast.fire(
           {
             icon: 'success',
@@ -50,14 +52,12 @@ export default {
     changeAvatar() {
       this.$router.push('/settings?tab=AvatarSelection')
     },
-    setImageSource() {
-      console.log(dataStore)
-      const avatar = dataStore.icon
-      const element = document.getElementById('avatar-img')
-      if(element) {
-        const attr = element.attributes.getNamedItem('src')
-        attr.value = 'src/assets/avatars/avatar-' + avatar.split('r')[1] + '.svg'
-        element.attributes.setNamedItem(attr)
+    async setAvatarImageSource(avatarSelector: string) {
+      try {
+        const avatar = await import(`@/assets/avatars/avatar-${avatarSelector}.svg`);
+        this.avatarImgSource = avatar.default || avatar;
+      } catch (error) {
+        console.error('Error loading avatar:', error);
       }
     }
   }
@@ -91,7 +91,7 @@ export default {
           <div class="sub-menu" v-if="isSubMenuOpen" :class="{ 'sub-menu-animation': isSubMenuOpen }">
             <div class="user-info">
               <div class="avatar-container">
-                <img class="avatar-icon" :class="{ 'avatar-icon-hover': onHover}" src="@/assets/avatars/avatar-1.svg" id="avatar-img" alt="Avatar Icon" height="80" width="80" @mouseover="onHover = true" @mouseout="onHover = false" @mousedown="changeAvatar"/>
+                <img class="avatar-icon" :class="{ 'avatar-icon-hover': onHover}" :src="avatarImgSource" id="avatar-img" alt="Avatar Icon" height="80" width="80" @mouseover="onHover = true" @mouseout="onHover = false" @mousedown="changeAvatar"/>
                 <label class="dont-show" :class="{'avatar-text': onHover }" @mouseover="onHover = true" @mousedown="changeAvatar">Personalize</label>
               </div>
               <div class="menu-item-container">
@@ -284,5 +284,10 @@ a {
   height: 2px;
   background-image: linear-gradient(to right, #ff98ba, #fbe870);
   margin-top: 0.5rem;
+}
+
+
+@media(max-width: 700px) {
+
 }
 </style>
