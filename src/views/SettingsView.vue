@@ -19,7 +19,6 @@ const inputChanged = ref(false)
 const avatarInUseId = ref('')
 
 let deleteClickCount = ref(0);
-let confirmDelete = ref(false);
 let finalConfirm = ref(false);
 
 const handleDeleteClick = () => {
@@ -32,21 +31,6 @@ const handleDeleteClick = () => {
   if (deleteClickCount.value === 5) {
     showFinalConfirmPopup();
   }
-};
-
-const showConfirmationPopup = () => {
-  Swal.fire({
-    text: 'Are you sure you want to proceed?',
-    showCancelButton: true,
-    cancelButtonText: 'No',
-    confirmButtonText: 'Yes',
-  }).then((result) => {
-    if (result.value) {
-      confirmDelete.value = true;
-    } else {
-      cancelDelete();
-    }
-  });
 };
 
 const showFinalConfirmPopup = () => {
@@ -66,7 +50,6 @@ const showFinalConfirmPopup = () => {
 
 const cancelDelete = () => {
   deleteClickCount.value = 0;
-  confirmDelete.value = false;
   finalConfirm.value = false;
 };
 
@@ -86,9 +69,7 @@ const sendDeleteRequest = async () => {
     })
   }
 
-// Reset the state
 deleteClickCount.value = 0;
-confirmDelete.value = false;
 finalConfirm.value = false;
 }
 ;
@@ -264,7 +245,7 @@ const goBack = () => {
         </div>
 
         <!-- Pop-ups -->
-        <div v-if="deleteClickCount >= 2 && !confirmDelete">
+        <div v-if="deleteClickCount >= 2">
           <p>Are you sure you want to proceed?</p>
           <button @click="cancelDelete">No</button>
           <button @click="showFinalConfirmPopup">Yes</button>
