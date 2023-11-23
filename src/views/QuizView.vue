@@ -111,33 +111,16 @@ async function fireResultOverview(scores: QuizResult) {
     text = `You achieved a new Highscore! Congratulations \n Your Score is: ${scores.score}`;
   }
 
-  try {
-    const apiKey = '5p8EQc0ZtuIBYG9bVPC2J4JGOC62YGjX';
-    if (scores.score > 300) {
-      tag = "winning"
-    }
-    else {tag = "fail"}
-    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=${tag}`);
-    const data = await response.json();
+  const imageUrl = await api.getResultGif(scores.score) ?? await import(`@/assets/win-image.svg`)
 
-    if (data.data) {
-      const imageUrl = data.data.images.fixed_height.url;
-
-      await Swal.fire({
-        imageUrl: imageUrl,
-        imageAlt: 'Random Gif',
-        imageHeight: '500px',
-        title: 'Congratulations',
-        text: text,
-        confirmButtonText: 'Ok'
-      });
-
-    } else {
-      console.error('Kein Gif gefunden');
-    }
-  } catch (error) {
-    console.error('Fehler beim Abrufen des zufälligen Gifs:', error);
-  }
+  await Swal.fire({
+      imageUrl: imageUrl,
+      imageAlt: 'Random Gif',
+      imageHeight: '500px',
+      title: 'Congratulations',
+      text: text,
+      confirmButtonText: 'Ok'
+  });
 }
 
 function delayAfterAnswer(): Promise<void> | null {

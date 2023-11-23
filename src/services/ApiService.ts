@@ -1,6 +1,7 @@
 import ToastComponent from "@/components/ToastComponent.vue"
 import type {Answer, Category, Question, QuizResult, User, AnswerResult} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
+import Swal from "sweetalert2";
 
 const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
 
@@ -192,6 +193,16 @@ class ApiService {
         dataStore.icon = user.icon
 
         return true
+    }
+
+    public async getResultGif(score: number): Promise<string> {
+        const API_KEY = '5p8EQc0ZtuIBYG9bVPC2J4JGOC62YGjX'
+        const TAG: string = score > 300 ? "winning" : "fail"
+
+        const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}&tag=${TAG}`)
+        const data = await response.json();
+
+        return data.data.images.fixed_height.url
     }
 }
 
