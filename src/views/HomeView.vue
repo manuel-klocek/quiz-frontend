@@ -57,27 +57,63 @@ async function login() {
 }
 
 async function register() {
-  if(password.value != passwordConfirm.value) {
-    console.log("passwords must match!")
-    return
-  }
-  
-  const success = await api.requestRegister(username.value, password.value, mail.value)
 
-  if(success) {
+  const usernameRegex = /.{1,}/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!usernameRegex.test(username.value)) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Invalid Username',
+      text: 'Please enter a valid username with at least 1 character.'
+    });
+    return;
+  }
+
+  if (!passwordRegex.test(password.value)) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Invalid Password',
+      text: 'Please enter a valid password with at least 8 characters, including uppercase, lowercase, and a number.'
+    });
+    return;
+  }
+
+  if (!emailRegex.test(mail.value)) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Invalid Email',
+      text: 'Please enter a valid email address.'
+    });
+    return;
+  }
+
+  if (password.value !== passwordConfirm.value) {
+    await Swal.fire({
+      icon: 'error',
+      title: 'Password do not match',
+      text: 'Please enter the same password in both fields.'
+    });
+    return;
+  }
+
+  const success = await api.requestRegister(username.value, password.value, mail.value);
+
+  if (success) {
     await useToast.fire({
       icon: 'success',
       title: 'User created successfully',
       text: 'You are getting logged in...',
       timer: 1500
-    })
-    await login()
+    });
+    await login();
   } else {
     await Swal.fire({
       icon: 'error',
       title: 'Failed',
       text: 'User creation failed! Please try again'
-    })
+    });
   }
 }
 
@@ -121,7 +157,7 @@ async function register() {
         <input type="text" placeholder="Enter Username" name="uname" v-model="username" autofocus>
 
         <label for="mail"><b>Mail</b></label>
-        <input type="email" placeholder="Enter Mail" name="mail" v-model="mail">
+        <input type="text" placeholder="Enter Mail" name="mail" v-model="mail">
 
         <label for="pass"><b>Password</b></label>
         <input type="password" placeholder="Enter Password" name="pass" v-model="password">
