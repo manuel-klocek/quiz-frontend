@@ -10,10 +10,11 @@ class ApiService {
     public static useApi(): ApiService {
         return ApiService.apiInstance
     }
+
     private toast = ToastComponent.Toast
 
     public async requestLogin(username: string, password: string): Promise<boolean> {
-        const response = await fetch(BASE_URL + '/login',  {
+        const response = await fetch(BASE_URL + '/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -26,7 +27,7 @@ class ApiService {
             )
         })
 
-        if(response.status == 401) {
+        if (response.status == 401) {
             this.toast.fire({
                 icon: 'error',
                 title: 'Authentication',
@@ -64,9 +65,9 @@ class ApiService {
             )
         })
 
-        if(response.status == 201)
+        if (response.status == 201)
             return true
-        else if(response.status == 409)
+        else if (response.status == 409)
             console.log("User already exists! -> Make check user request on input!")
         else
             console.log("Bad Request with status code: " + response.status + " " + response.statusText)
@@ -113,7 +114,7 @@ class ApiService {
         return await fetch(BASE_URL + '/logout', {
             method: 'DELETE',
             headers: {
-                'Authorization' : 'Bearer ' + dataStore.sessionToken
+                'Authorization': 'Bearer ' + dataStore.sessionToken
             }
         })
     }
@@ -122,7 +123,7 @@ class ApiService {
         const response = await fetch(BASE_URL + '/user', {
             method: 'PUT',
             headers: {
-                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Authorization': 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
@@ -134,8 +135,7 @@ class ApiService {
         })
 
 
-
-        if(response.status == 202)
+        if (response.status == 202)
             return true
         else
             console.log("Bad Request with status code: " + response.status + " " + response.statusText)
@@ -147,7 +147,7 @@ class ApiService {
         const response = await fetch(BASE_URL + '/answers', {
             method: 'POST',
             headers: {
-                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Authorization': 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(answers)
@@ -159,12 +159,12 @@ class ApiService {
     //TODO error management
     public async fetchScoreboard(page: number = 0): Promise<User[]> {
         let parameters = ''
-        if(page !== 0)
+        if (page !== 0)
             parameters = '?page=' + page
 
         const response = await fetch(BASE_URL + '/scoreboard' + parameters, {
             headers: {
-                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Authorization': 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
             }
         })
@@ -183,6 +183,16 @@ class ApiService {
         dataStore.icon = user.icon
 
         return true
+    }
+
+    public async deleteUser(): Promise<boolean> {
+        const response = await fetch(BASE_URL + '/user', {
+            method: 'DELETE',
+            headers: {
+                'Authorization': 'Bearer ' + dataStore.sessionToken
+            }
+        })
+            return response.status === 200
     }
 }
 
