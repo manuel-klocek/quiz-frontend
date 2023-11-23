@@ -7,6 +7,8 @@ import type {Category, User} from '@/models/Models';
 const api = ApiService.useApi()
 const categories: ref<Category[]> = ref([])
 const scoreboard: ref<User[]> = ref([])
+const PAGE_SIZE = 10
+const currentPage = ref(0)
 
 export default {
   components: {HeaderComponent},
@@ -23,13 +25,28 @@ export default {
 
     api.fetchScoreboard().then(response => {
       scoreboard.value = response
+      console.log(scoreboard.value)
     })
+  },
+  computed: {
+    paginatedScoreboard() {
+      const start = currentPage.value * PAGE_SIZE;
+      const end = start + PAGE_SIZE;
+      return this.scoreboard.slice(start, end);
+    },
+    totalPages() {
+      console.log(Math.ceil(this.scoreboard.length / PAGE_SIZE))
+      return Math.ceil(this.scoreboard.length / PAGE_SIZE);
+    }
   },
   methods: {
     handleClick(index: number) {
       let categoryId = categories.value[index].categoryId ?? '9'
 
       this.$router.push('/quiz?category=' + categoryId)
+    },
+    setPage(pageNumber) {
+      currentPage.value = pageNumber;
     }
   }
 };
@@ -64,13 +81,23 @@ export default {
             <th>Totally Answered Questions</th>
             <th>Highscore</th>
           </tr>
-          <tr v-for="(item, index) in scoreboard" :key="index">
+          <tr v-for="(item, index) in paginatedScoreboard" :key="index">
             <td>{{ index + 1 }}</td>
             <td>{{ item.username }}</td>
             <td>{{ item.totallyAnsweredQuestions }}</td>
             <td>{{ item.highscore }}</td>
           </tr>
         </table>
+
+        <div class="pagination">
+          <button
+              v-for="pageNumber in totalPages"
+              :key="pageNumber"
+              @click="setPage(pageNumber - 1)"
+          >
+            {{ pageNumber }}
+          </button>
+        </div>
       </div>
     </div>
   </main>

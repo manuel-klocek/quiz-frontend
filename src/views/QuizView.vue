@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import ApiService from "@/services/ApiService";
-import {ref, onMounted, UnwrapRef} from 'vue';
+import {ref, onMounted} from 'vue';
 import HeaderComponent from '../components/HeaderComponent.vue'
 import type {Question, Answer, QuizResult} from "@/models/Models";
 import Swal from 'sweetalert2';
@@ -13,7 +13,6 @@ const currentQuizRound = ref(0)
 const quizMaxRounds = ref(0)
 const currentQuestion = ref({} as Question)
 const currentRoundAnswers = ref([] as string[])
-const userAnswers = ref([] as Answer[])
 const currentTimeout = ref<Promise<void>  | null>(null)
 let tag = ""
 
@@ -45,9 +44,7 @@ const nextQuizRound = async (round: number = 0) => {
 }
 
 const setCurrentRoundAnswers = () => {
-  let answers: string[] = []
-  answers.push(...currentQuestion.value.incorrectAnswers)
-  answers.push(currentQuestion.value.correctAnswer)
+  let answers: string[] = [...currentQuestion.value.answers]
   currentRoundAnswers.value = shuffle(answers)
 }
 
@@ -62,43 +59,37 @@ const shuffle = (arr: string[]): string[] => {
   return shuffledArray;
 }
 
-const evaluateAnswer = (index: number) => {
+const evaluateAnswer = async (index: number) => {
   if(currentTimeout.value !== null)
     return
 
   const clickedAnswer = currentRoundAnswers.value[index]
-  const correctAnswer = currentQuestion.value.correctAnswer
-  const answer = {} as Answer
+  const answerResult = await api.submitAnswer({questionId: currentQuestion.value.id, takenAnswer: clickedAnswer} as Answer)
 
-  answer.questionId = currentQuestion.value.id
-
-  if (clickedAnswer === correctAnswer) {
+  if (answerResult.correctAnswer === clickedAnswer) {
     const buttons = document.querySelectorAll('.answer-item')
     buttons[index].classList.add('correct')
-
-    answer.correctAnswered = true
-    userAnswers.value = [...userAnswers.value, answer]
   } else {
     const buttons = document.querySelectorAll('.answer-item')
     buttons[index].classList.add('false')
 
-    const correctIndex = currentRoundAnswers.value.findIndex(answer => answer === correctAnswer)
+    const correctIndex = currentRoundAnswers.value.indexOf(answerResult.correctAnswer)
+    console.log(correctIndex)
+    console.log(answerResult.correctAnswer)
+    console.log(currentRoundAnswers.value)
     buttons[correctIndex].classList.add('correct')
-
-    answer.correctAnswered = false
-    userAnswers.value = [...userAnswers.value, answer]
   }
 
   if(currentQuizRound.value === questions.value.length - 1) {
-    endQuiz()
+    await endQuiz()
     return
   }
 
-  nextQuizRound(currentQuizRound.value + 1)
+  await nextQuizRound(currentQuizRound.value + 1)
 }
 
 async function endQuiz() {
-  const scores = await api.retrieveScore(userAnswers.value)
+  const scores = await api.triggerQuizEndProcess()
 
   await fireResultOverview(scores)
 
