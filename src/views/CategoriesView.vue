@@ -143,17 +143,35 @@ th, td {
   }
 
   .page-container {
-    overflow: hidden;
+    overflow: auto;
   }
 
   .category-highscore-container {
-    display: inline-block;
-    width: 98%;
+    display: block;
+    width: 100%;
     overflow: auto;
   }
 
   .category-container {
-    margin-left: -5%;
+    width: 90%;
+    margin: auto;
+  }
+
+  .highscore-container {
+    margin: auto auto 10rem auto;
+    width: 90%;
+    height: 100%;
+  }
+
+  table {
+    margin-top: 0;
+  }
+
+  .text-item {
+    margin: 8px;
+    padding: 15px;
+    height: 80px;
+    width: 80px;
   }
 }
 </style>
