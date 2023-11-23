@@ -122,9 +122,7 @@ const editUserInfo = async () => {
 const markAvatarInUse = () => {
   avatarInUseId.value = dataStore.icon
   const element = document.getElementById(avatarInUseId.value)
-  if (element !== null) {
-    element.classList.add('avatar-in-use')
-  }
+  element.classList.add('avatar-in-use')
 }
 
 const avatarSelection = ($event: any) => {
@@ -406,28 +404,30 @@ input {
   justify-content: center;
   height: 100vh;
   text-align: center;
+}
 
-  h1 {
-    color: #009688;
-    margin-bottom: 20px;
-  }
+h1 {
+  color: #009688;
+  margin-bottom: 20px;
+}
 
-  h2, h3 {
-    color: #009688;
-    margin-bottom: 10px;
-  }
+h2, h3 {
+  color: #009688;
+  margin-bottom: 10px;
+}
 
-  .about-us-container {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+.about-us-container {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
 
-    p {
-      color: #555;
-      margin-bottom: 20px;
-    }
+p {
+  color: #555;
+  margin-bottom: 20px;
+}
     
 @media(max-width: 1000px) {
   .settings-container {
