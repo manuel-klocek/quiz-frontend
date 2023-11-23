@@ -14,10 +14,13 @@ const quizMaxRounds = ref(0)
 const currentQuestion = ref({} as Question)
 const currentRoundAnswers = ref([] as string[])
 const currentTimeout = ref<Promise<void>  | null>(null)
+const answerGotClicked: ref<boolean> = ref(false)
+const quizEnded: ref<boolean> = ref(false)
 let tag = ""
 
 onMounted(() => {
   api = ApiService.useApi()
+  quizEnded.value = false
 
   fetchQuestions()
 })
@@ -33,6 +36,7 @@ const nextQuizRound = async (round: number = 0) => {
   if(round !== 0) {
     await delayAfterAnswer()
     currentTimeout.value = null
+    answerGotClicked.value = false
   }
 
   setColorsToDefault()
@@ -60,8 +64,10 @@ const shuffle = (arr: string[]): string[] => {
 }
 
 const evaluateAnswer = async (index: number) => {
-  if(currentTimeout.value !== null)
+  if(currentTimeout.value !== null || answerGotClicked.value || quizEnded.value)
     return
+
+  answerGotClicked.value = true
 
   const clickedAnswer = currentRoundAnswers.value[index]
   const answerResult = await api.submitAnswer({questionId: currentQuestion.value.id, takenAnswer: clickedAnswer} as Answer)
@@ -74,16 +80,16 @@ const evaluateAnswer = async (index: number) => {
     buttons[index].classList.add('false')
 
     const correctIndex = currentRoundAnswers.value.indexOf(answerResult.correctAnswer)
-    console.log(correctIndex)
-    console.log(answerResult.correctAnswer)
-    console.log(currentRoundAnswers.value)
     buttons[correctIndex].classList.add('correct')
   }
 
   if(currentQuizRound.value === questions.value.length - 1) {
+    quizEnded.value = true
     await endQuiz()
     return
   }
+
+
 
   await nextQuizRound(currentQuizRound.value + 1)
 }
