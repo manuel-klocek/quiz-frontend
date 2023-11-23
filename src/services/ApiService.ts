@@ -1,5 +1,5 @@
 import ToastComponent from "@/components/ToastComponent.vue"
-import type {Answer, Category, Question, QuizResult, User} from "@/models/Models"
+import type {Answer, Category, Question, QuizResult, User, AnswerResult} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
 
 const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
@@ -142,15 +142,27 @@ class ApiService {
         return false
     }
 
-    //TODO error management
-    public async retrieveScore(answers: Answer[]): Promise<QuizResult> {
-        const response = await fetch(BASE_URL + '/answers', {
+    public async submitAnswer(answer: Answer): Promise<AnswerResult> {
+        const response = await fetch(BASE_URL + '/answer', {
             method: 'POST',
             headers: {
                 'Authorization' : 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(answers)
+            body: JSON.stringify(answer)
+        })
+
+        return await response.json()
+    }
+
+    //TODO error management
+    public async triggerQuizEndProcess(): Promise<QuizResult> {
+        const response = await fetch(BASE_URL + '/finish-quiz', {
+            method: 'POST',
+            headers: {
+                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Content-Type': 'application/json'
+            }
         })
 
         return await response.json()
