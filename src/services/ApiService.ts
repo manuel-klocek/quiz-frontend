@@ -157,12 +157,9 @@ class ApiService {
     }
 
     //TODO error management
-    public async fetchScoreboard(page: number = 0): Promise<User[]> {
-        let parameters = ''
-        if(page !== 0)
-            parameters = '?page=' + page
+    public async fetchScoreboard(): Promise<User[]> {
 
-        const response = await fetch(BASE_URL + '/scoreboard' + parameters, {
+        const response = await fetch(BASE_URL + '/scoreboard', {
             headers: {
                 'Authorization' : 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
