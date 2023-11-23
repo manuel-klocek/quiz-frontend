@@ -1,7 +1,6 @@
 import ToastComponent from "@/components/ToastComponent.vue"
 import type {Answer, Category, Question, QuizResult, User, AnswerResult} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
-import Swal from "sweetalert2";
 
 const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
 
