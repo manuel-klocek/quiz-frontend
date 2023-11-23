@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import ApiService from "@/services/ApiService";
-import {ref, onMounted, UnwrapRef} from 'vue';
+import {ref, onMounted} from 'vue';
 import HeaderComponent from '../components/HeaderComponent.vue'
 import type {Question, Answer, QuizResult} from "@/models/Models";
 import Swal from 'sweetalert2';
@@ -13,12 +13,14 @@ const currentQuizRound = ref(0)
 const quizMaxRounds = ref(0)
 const currentQuestion = ref({} as Question)
 const currentRoundAnswers = ref([] as string[])
-const userAnswers = ref([] as Answer[])
 const currentTimeout = ref<Promise<void>  | null>(null)
+const answerGotClicked: ref<boolean> = ref(false)
+const quizEnded: ref<boolean> = ref(false)
 let tag = ""
 
 onMounted(() => {
   api = ApiService.useApi()
+  quizEnded.value = false
 
   fetchQuestions()
 })
@@ -34,6 +36,7 @@ const nextQuizRound = async (round: number = 0) => {
   if(round !== 0) {
     await delayAfterAnswer()
     currentTimeout.value = null
+    answerGotClicked.value = false
   }
 
   setColorsToDefault()
@@ -45,9 +48,7 @@ const nextQuizRound = async (round: number = 0) => {
 }
 
 const setCurrentRoundAnswers = () => {
-  let answers: string[] = []
-  answers.push(...currentQuestion.value.incorrectAnswers)
-  answers.push(currentQuestion.value.correctAnswer)
+  let answers: string[] = [...currentQuestion.value.answers]
   currentRoundAnswers.value = shuffle(answers)
 }
 
@@ -62,43 +63,39 @@ const shuffle = (arr: string[]): string[] => {
   return shuffledArray;
 }
 
-const evaluateAnswer = (index: number) => {
-  if(currentTimeout.value !== null)
+const evaluateAnswer = async (index: number) => {
+  if(currentTimeout.value !== null || answerGotClicked.value || quizEnded.value)
     return
 
+  answerGotClicked.value = true
+
   const clickedAnswer = currentRoundAnswers.value[index]
-  const correctAnswer = currentQuestion.value.correctAnswer
-  const answer = {} as Answer
+  const answerResult = await api.submitAnswer({questionId: currentQuestion.value.id, takenAnswer: clickedAnswer} as Answer)
 
-  answer.questionId = currentQuestion.value.id
-
-  if (clickedAnswer === correctAnswer) {
+  if (answerResult.correctAnswer === clickedAnswer) {
     const buttons = document.querySelectorAll('.answer-item')
     buttons[index].classList.add('correct')
-
-    answer.correctAnswered = true
-    userAnswers.value = [...userAnswers.value, answer]
   } else {
     const buttons = document.querySelectorAll('.answer-item')
     buttons[index].classList.add('false')
 
-    const correctIndex = currentRoundAnswers.value.findIndex(answer => answer === correctAnswer)
+    const correctIndex = currentRoundAnswers.value.indexOf(answerResult.correctAnswer)
     buttons[correctIndex].classList.add('correct')
-
-    answer.correctAnswered = false
-    userAnswers.value = [...userAnswers.value, answer]
   }
 
   if(currentQuizRound.value === questions.value.length - 1) {
-    endQuiz()
+    quizEnded.value = true
+    await endQuiz()
     return
   }
 
-  nextQuizRound(currentQuizRound.value + 1)
+
+
+  await nextQuizRound(currentQuizRound.value + 1)
 }
 
 async function endQuiz() {
-  const scores = await api.retrieveScore(userAnswers.value)
+  const scores = await api.triggerQuizEndProcess()
 
   await fireResultOverview(scores)
 
@@ -114,33 +111,16 @@ async function fireResultOverview(scores: QuizResult) {
     text = `You achieved a new Highscore! Congratulations \n Your Score is: ${scores.score}`;
   }
 
-  try {
-    const apiKey = '5p8EQc0ZtuIBYG9bVPC2J4JGOC62YGjX';
-    if (scores.score > 300) {
-      tag = "winning"
-    }
-    else {tag = "fail"}
-    const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${apiKey}&tag=${tag}`);
-    const data = await response.json();
+  const imageUrl = await api.getResultGif(scores.score) ?? await import(`@/assets/win-image.svg`)
 
-    if (data.data) {
-      const imageUrl = data.data.images.fixed_height.url;
-
-      await Swal.fire({
-        imageUrl: imageUrl,
-        imageAlt: 'Random Gif',
-        imageHeight: '500px',
-        title: 'Congratulations',
-        text: text,
-        confirmButtonText: 'Ok'
-      });
-
-    } else {
-      console.error('Kein Gif gefunden');
-    }
-  } catch (error) {
-    console.error('Fehler beim Abrufen des zufälligen Gifs:', error);
-  }
+  await Swal.fire({
+      imageUrl: imageUrl,
+      imageAlt: 'Random Gif',
+      imageHeight: '500px',
+      title: 'Congratulations',
+      text: text,
+      confirmButtonText: 'Ok'
+  });
 }
 
 function delayAfterAnswer(): Promise<void> | null {

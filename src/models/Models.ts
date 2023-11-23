@@ -14,8 +14,7 @@ export type Question = {
     type: QuestionType,
     difficulty: QuestionDifficulty,
     question: string,
-    correctAnswer: string,
-    incorrectAnswers: string[]
+    answers: string[]
 }
 
 export type User = {
@@ -29,10 +28,14 @@ export type User = {
 
 export type Answer = {
     questionId: string,
-    correctAnswered: boolean
+    takenAnswer: string
 }
 
 export type QuizResult = {
     score: number,
     highscore: number
+}
+
+export type AnswerResult = {
+    correctAnswer: string
 }

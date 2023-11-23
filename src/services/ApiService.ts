@@ -1,6 +1,7 @@
 import ToastComponent from "@/components/ToastComponent.vue"
-import type {Answer, Category, Question, QuizResult, User} from "@/models/Models"
+import type {Answer, Category, Question, QuizResult, User, AnswerResult} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
+import Swal from "sweetalert2";
 
 const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
 
@@ -142,27 +143,34 @@ class ApiService {
         return false
     }
 
-    //TODO error management
-    public async retrieveScore(answers: Answer[]): Promise<QuizResult> {
-        const response = await fetch(BASE_URL + '/answers', {
+    public async submitAnswer(answer: Answer): Promise<AnswerResult> {
+        const response = await fetch(BASE_URL + '/answer', {
             method: 'POST',
             headers: {
                 'Authorization': 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(answers)
+            body: JSON.stringify(answer)
         })
 
         return await response.json()
     }
 
     //TODO error management
-    public async fetchScoreboard(page: number = 0): Promise<User[]> {
-        let parameters = ''
-        if (page !== 0)
-            parameters = '?page=' + page
+    public async triggerQuizEndProcess(): Promise<QuizResult> {
+        const response = await fetch(BASE_URL + '/finish-quiz', {
+            method: 'POST',
+            headers: {
+                'Authorization' : 'Bearer ' + dataStore.sessionToken,
+                'Content-Type': 'application/json'
+            }
+        })
 
-        const response = await fetch(BASE_URL + '/scoreboard' + parameters, {
+        return await response.json()
+    }
+
+    public async fetchScoreboard(): Promise<User[]> {
+        const response = await fetch(BASE_URL + '/scoreboard', {
             headers: {
                 'Authorization': 'Bearer ' + dataStore.sessionToken,
                 'Content-Type': 'application/json'
@@ -192,7 +200,19 @@ class ApiService {
                 'Authorization': 'Bearer ' + dataStore.sessionToken
             }
         })
-            return response.status === 200
+        
+        return response.status === 200
+    }
+
+
+    public async getResultGif(score: number): Promise<string> {
+        const API_KEY = '5p8EQc0ZtuIBYG9bVPC2J4JGOC62YGjX'
+        const TAG: string = score > 300 ? "winning" : "fail"
+
+        const response = await fetch(`https://api.giphy.com/v1/gifs/random?api_key=${API_KEY}&tag=${TAG}`)
+        const data = await response.json();
+
+        return data.data.images.fixed_height.url
     }
 }
 

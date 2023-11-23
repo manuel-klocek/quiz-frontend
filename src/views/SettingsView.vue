@@ -428,6 +428,61 @@ input {
       color: #555;
       margin-bottom: 20px;
     }
+    
+@media(max-width: 1000px) {
+  .settings-container {
+    align-self: center;
+    width: 100%;
+  }
+
+  .back-arrow {
+    margin-top: 10rem;
+    margin-left: 4rem;
+  }
+
+  .user-info {
+    width: 60%;
+    margin-left: 2.5rem;
+  }
+
+  .input-fields {
+    display: block;
+  }
+
+  input {
+    padding: 1rem;
+    min-width: 5rem;
+    max-width: 8rem;
+    height: fit-content;
+    margin-top: 2rem;
+    margin-left: 5rem;
+  }
+
+  .spacing {
+    padding: 1rem;
+  }
+
+  li {
+    list-style-type: none;
+    height: 2rem;
+    width: 99%;
+    font-size: 1rem;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    margin-left: 0;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .avatar-item {
+    transform: scale(0.75);
+    margin: 12px;
+  }
+
+  .avatar-selection {
+    margin-bottom: 7rem;
   }
 }
 
