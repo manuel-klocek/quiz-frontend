@@ -89,8 +89,6 @@ const evaluateAnswer = async (index: number) => {
     return
   }
 
-
-
   await nextQuizRound(currentQuizRound.value + 1)
 }
 
@@ -188,15 +186,16 @@ function setColorsToDefault() {
 }
 
 .container-current-round {
+  margin: 0 0 0 70%;
+}
+
+.text-current-round {
   position: relative;
-  margin: 0 2rem 0 auto;
   border: solid 2px var(--color-text);
   border-radius: 10px;
   font-size: 3rem;
   width: fit-content;
-}
-
-.text-current-round {
+  margin: 2rem;
   padding: 1rem;
 }
 
@@ -250,6 +249,38 @@ h2 {
 
 .false {
   background-color: #ff98ba;
+}
+
+@media(max-width: 1000px) {
+  body {
+    overflow: auto;
+  }
+
+  .answer-item:hover {
+    transform: none;
+  }
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 0;
+  }
+
+  h2 {
+    margin-top: 0;
+    font-size: 1.5rem;
+  }
+
+  .text-current-round {
+    padding: 0.1rem;
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .answer-item {
+    height: 4rem;
+    width: 7rem;
+    margin: 0.5rem;
+  }
 }
 
 </style>

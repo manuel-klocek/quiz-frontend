@@ -6,7 +6,6 @@ import {dataStore} from '@/services/DataStore';
 import ApiService from "@/services/ApiService";
 import ToastComponent from "@/components/ToastComponent.vue";
 import Swal from "sweetalert2";
-import HomeView from "@/views/HomeView.vue";
 
 let urlParams: URLSearchParams
 let api: ApiService
@@ -24,8 +23,6 @@ let finalConfirm = ref(false);
 const handleDeleteClick = () => {
   if (deleteClickCount.value < 2) {
     deleteClickCount.value++;
-  } else {
-    showConfirmationPopup();
   }
 
   if (deleteClickCount.value === 5) {
@@ -35,7 +32,7 @@ const handleDeleteClick = () => {
 
 const showFinalConfirmPopup = () => {
   Swal.fire({
-    text: 'This is the final confirmation!',
+    text: 'Do you really want to delete your account!',
     showCancelButton: true,
     cancelButtonText: 'No',
     confirmButtonText: 'Yes',
@@ -60,9 +57,9 @@ const sendDeleteRequest = async () => {
       title: 'User successfully deleted',
       text: 'Thanks for playing QuizMe. See you the next time 🥸'
     })
-    router.push('/')
+    await router.push('/')
   } else {
-    Swal.fire({
+    await Swal.fire({
       icon: 'error',
       title: 'User not deleted',
       text: 'Please try again'
@@ -86,7 +83,6 @@ const inputChange = () => {
 }
 
 const editUserInfo = async () => {
-  //TODO overall request for user-info + implementation of icon
   const success = await api.editUserInfo(username.value, mail.value, avatarInUseId.value)
 
   if (success)
@@ -237,21 +233,17 @@ const goBack = () => {
     </div>
 
     <div v-if="currentTab === 'DeleteAccount'">
-      <!-- ... (bestehender Code) -->
 
       <div class="delete-button-container">
         <div class="delete-button" @click="handleDeleteClick" style="color: darkred">
           Delete Account
         </div>
 
-        <!-- Pop-ups -->
         <div v-if="deleteClickCount >= 2">
           <p>Are you sure you want to proceed?</p>
           <button @click="cancelDelete">No</button>
           <button @click="showFinalConfirmPopup">Yes</button>
         </div>
-
-        <!-- Add more pop-ups as needed -->
 
         <div v-if="finalConfirm">
           <p>This is the final confirmation!</p>
