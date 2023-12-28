@@ -12,13 +12,12 @@ body {
   display: flex;
   place-items: center;
   overflow: hidden;
-  touch-action: none;
 }
 
 @media(max-width: 1000px) {
   body {
     place-items: initial;
-    overflow: auto;
-    touch-action: none;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }

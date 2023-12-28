@@ -15,7 +15,8 @@ export default {
   data() {
     return {
       categories: categories,
-      scoreboard: scoreboard
+      scoreboard: scoreboard,
+      currentPage: currentPage
     };
   },
   mounted() {
@@ -35,7 +36,6 @@ export default {
       return this.scoreboard.slice(start, end);
     },
     totalPages() {
-      console.log(Math.ceil(this.scoreboard.length / PAGE_SIZE))
       return Math.ceil(this.scoreboard.length / PAGE_SIZE);
     }
   },
@@ -82,7 +82,7 @@ export default {
             <th>Highscore</th>
           </tr>
           <tr v-for="(item, index) in paginatedScoreboard" :key="index">
-            <td>{{ index + 1 }}</td>
+            <td>{{ (currentPage * 10) + index + 1 }}</td>
             <td>{{ item.username }}</td>
             <td>{{ item.totallyAnsweredQuestions }}</td>
             <td>{{ item.highscore }}</td>
