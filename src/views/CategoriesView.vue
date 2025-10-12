@@ -2,11 +2,11 @@
 import HeaderComponent from '@/components/HeaderComponent.vue'
 import ApiService from "@/services/ApiService";
 import { ref } from 'vue';
-import type {Category, User} from '@/models/Models';
+import type {Category, User} from "@/models/Models";
 
 const api = ApiService.useApi()
-const categories: ref<Category[]> = ref([])
-const scoreboard: ref<User[]> = ref([])
+const categories = ref<Category[]>([])
+const scoreboard = ref<User[]>([])
 const PAGE_SIZE = 10
 const currentPage = ref(0)
 
@@ -45,7 +45,7 @@ export default {
 
       this.$router.push('/quiz?category=' + categoryId)
     },
-    setPage(pageNumber) {
+    setPage(pageNumber: number) {
       currentPage.value = pageNumber;
     }
   }

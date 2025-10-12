@@ -14,9 +14,8 @@ const quizMaxRounds = ref(0)
 const currentQuestion = ref({} as Question)
 const currentRoundAnswers = ref([] as string[])
 const currentTimeout = ref<Promise<void>  | null>(null)
-const answerGotClicked: ref<boolean> = ref(false)
-const quizEnded: ref<boolean> = ref(false)
-let tag = ""
+const answerGotClicked = ref<boolean>(false)
+const quizEnded = ref<boolean>(false)
 
 onMounted(() => {
   api = ApiService.useApi()

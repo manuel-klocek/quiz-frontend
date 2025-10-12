@@ -99,13 +99,13 @@ const editUserInfo = async () => {
 const markAvatarInUse = () => {
   avatarInUseId.value = dataStore.icon
   const element = document.getElementById(avatarInUseId.value)
-  element.classList.add('avatar-in-use')
+  element?.classList?.add('avatar-in-use')
 }
 
 const avatarSelection = ($event: any) => {
   const selectedAvatarId = $event.target.id
   const element = document.getElementById(avatarInUseId.value)
-  element.classList.remove('avatar-in-use')
+  element?.classList?.remove('avatar-in-use')
   $event.target.classList.add('avatar-in-use')
   avatarInUseId.value = selectedAvatarId
   editUserInfo()
@@ -113,7 +113,7 @@ const avatarSelection = ($event: any) => {
 
 onMounted(() => {
   urlParams = new URLSearchParams(window.location.search)
-  currentTab.value = urlParams.get('tab' ?? '')
+  currentTab.value = urlParams.get('tab') ?? ''
   api = ApiService.useApi()
 
   if (currentTab.value == 'AvatarSelection')
@@ -232,24 +232,21 @@ const goBack = () => {
       </div>
     </div>
 
-    <div v-if="currentTab === 'DeleteAccount'">
+    <div class="delete-section" v-if="currentTab === 'DeleteAccount'">
+      <div class="delete-button" @click="handleDeleteClick" style="color: darkred">
+        Delete Account
+      </div>
 
-      <div class="delete-button-container">
-        <div class="delete-button" @click="handleDeleteClick" style="color: darkred">
-          Delete Account
-        </div>
+      <div v-if="deleteClickCount >= 2">
+        <p>Are you sure you want to proceed?</p>
+        <button @click="cancelDelete">No</button>
+        <button @click="showFinalConfirmPopup">Yes</button>
+      </div>
 
-        <div v-if="deleteClickCount >= 2">
-          <p>Are you sure you want to proceed?</p>
-          <button @click="cancelDelete">No</button>
-          <button @click="showFinalConfirmPopup">Yes</button>
-        </div>
-
-        <div v-if="finalConfirm">
-          <p>This is the final confirmation!</p>
-          <button @click="cancelDelete">No</button>
-          <button @click="sendDeleteRequest">Yes</button>
-        </div>
+      <div v-if="finalConfirm">
+        <p>This is the final confirmation!</p>
+        <button @click="cancelDelete">No</button>
+        <button @click="sendDeleteRequest">Yes</button>
       </div>
     </div>
   </div>
@@ -321,6 +318,10 @@ input {
   width: 75%;
 }
 
+.delete-section {
+  width: 75%;
+}
+
 .input-fields {
   display: flex;
   justify-content: center;
@@ -365,41 +366,16 @@ input {
   margin: 0 0 0 2rem;
 }
 
-.about-us-section {
-  font-family: 'Arial', sans-serif;
-  background-color: #f8f8f8;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  text-align: center;
-}
-
 h1 {
   color: #009688;
-  margin-bottom: 20px;
 }
 
 h2, h3 {
   color: #009688;
-  margin-bottom: 10px;
-}
-
-.about-us-container {
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
 }
 
 p {
   color: #555;
-  margin-bottom: 20px;
 }
     
 @media(max-width: 1000px) {
