@@ -2,7 +2,7 @@ import ToastComponent from "@/components/ToastComponent.vue"
 import type {Answer, Category, Question, QuizResult, User, AnswerResult} from "@/models/Models"
 import {dataStore} from "@/services/DataStore"
 
-const BASE_URL = "https://dev-quizme-backend.apps.01.cf.eu01.stackit.cloud/api"
+const BASE_URL = "http://localhost:8080/api"
 
 class ApiService {
     private static apiInstance: ApiService = new ApiService()
